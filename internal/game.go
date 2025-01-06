@@ -1,12 +1,12 @@
 package internal
 
 type Game struct {
-	players      []Player
-	teams        []Player
-	teams_points []int
+	Players      []Player
+	Teams        []Player
+	Teams_points []int
 
-	winner     bool
-	win_by_two bool
+	Winner     bool
+	Win_by_two bool
 
-	rounds int
+	Rounds int
 }

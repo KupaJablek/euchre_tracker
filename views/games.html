@@ -1,0 +1,16 @@
+{{ block "games" . }}
+<div>
+    <h1>Games Tab!</h1>
+    <p>A list of current and completed games will be listed below</p>
+
+    <div>
+        add new game
+    </div>
+
+    {{ range .Games }}
+    <div>
+        <p>{{ .Rounds }}</p>
+    </div>
+    {{ end }}
+</div>
+{{ end }}

@@ -6,7 +6,8 @@ type Player struct {
 	Wins         int
 	Losses       int
 	Tricks       int
-	Lone_hands   int
+    Lone_hands   int
+    Points       int
 }
 
 func NewPlayer(name string) *Player {
@@ -17,5 +18,6 @@ func NewPlayer(name string) *Player {
 		0,
 		0,
 		0,
+        0,
 	}
 }

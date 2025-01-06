@@ -60,5 +60,9 @@ func main() {
 		return c.Render(200, "players", data)
 	})
 
+	e.GET("/games", func(c echo.Context) error {
+		return c.Render(200, "games", data)
+	})
+
 	e.Logger.Fatal(e.Start(":" + port))
 }
