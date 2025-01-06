@@ -1,0 +1,17 @@
+{{ block "players" . }}
+<div>
+    <h1>Players</h1>
+
+    <div>
+        Add new player
+    </div>
+
+    <div>
+        {{ range .Players }}
+            <div>
+                {{ .Name }}
+            </div>
+        {{ end }}
+    </div>
+</div>
+{{ end }}
