@@ -60,5 +60,11 @@ func main() {
 		return c.Render(200, "players", data)
 	})
 
+	e.POST("/new_player", func(c echo.Context) error {
+		name := c.FormValue("name")
+		data.Players = append(data.Players, *internal.NewPlayer(name))
+		return c.Render(200, "player_list", data)
+	})
+
 	e.Logger.Fatal(e.Start(":" + port))
 }

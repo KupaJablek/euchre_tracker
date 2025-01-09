@@ -2,7 +2,7 @@ package internal
 
 type Player struct {
 	Name         string
-	Games_playes int
+	Games_played int
 	Wins         int
 	Losses       int
 	Tricks       int

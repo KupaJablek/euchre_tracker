@@ -4,14 +4,47 @@
 
     <div>
         Add new player
+        {{ template "player_form" . }}
     </div>
 
     <div>
-        {{ range .Players }}
-            <div>
-                {{ .Name }}
-            </div>
-        {{ end }}
+        {{ template "player_list" .}}
     </div>
+</div>
+{{ end }}
+
+
+{{ block "player_form" . }}
+<form hx-post="/new_player" hx-target="#player_list" hx-swap="outerHTML">
+    name: <input type="text" name="name" />
+    <button type="submit">Add Player</button>
+</form>
+
+{{ end }}
+
+{{ block "player_list" . }}
+<div id="player_list">
+    {{ range .Players }}
+    <div>
+        <p>{{.Name}}</p>
+        <ul>
+            <li>
+                Games Played: {{.Games_played}}
+            </li>
+            <li>
+                Wins: {{.Wins}}
+            </li>
+            <li>
+                Losses: {{.Losses}}
+            </li>
+            <li>
+                Ticks Taken: {{.Tricks}}
+            </li>
+            <li>
+                Lone Hands: {{.Lone_hands}}
+            </li>
+        </ul>
+    </div>
+    {{ end }}
 </div>
 {{ end }}
