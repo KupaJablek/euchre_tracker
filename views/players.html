@@ -23,28 +23,24 @@
 {{ end }}
 
 {{ block "player_list" . }}
+<!-- will hold a list of player cards to display the player information -->
 <div id="player_list">
     {{ range .Players }}
-    <div>
-        <p>{{.Name}}</p>
-        <ul>
-            <li>
-                Games Played: {{.Games_played}}
-            </li>
-            <li>
-                Wins: {{.Wins}}
-            </li>
-            <li>
-                Losses: {{.Losses}}
-            </li>
-            <li>
-                Ticks Taken: {{.Tricks}}
-            </li>
-            <li>
-                Lone Hands: {{.Lone_hands}}
-            </li>
-        </ul>
-    </div>
+        <!-- arugment of '.' is current player in list -->
+        {{template "player_card" . }}
     {{ end }}
 </div>
+{{ end }}
+
+{{ block "player_card" .}}
+<!-- display for player stats -->
+    <div hx-target="this" hx-swap="outerHTML">
+        <h3>{{.Name}}</h3>
+        <div><label>Games Played</label>: {{.Games_played}}</div>
+        <div><label>Wins</label>: {{.Wins}}</div>
+        <div><label>Losses</label>: {{.Losses}}</div>
+        <div><label>Tricks</label>: {{.Tricks}}</div>
+        <div><label>Lone Hands</label>: {{.Lone_hands}}</div>
+        <button>Edit</button>
+    </div>
 {{ end }}

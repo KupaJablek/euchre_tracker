@@ -32,6 +32,8 @@ type Data struct {
 }
 
 func main() {
+	id := 0
+
 	fmt.Println("welcome to the program")
 
 	e := echo.New()
@@ -41,7 +43,8 @@ func main() {
 	e.Renderer = newTemplate()
 
 	players := make([]internal.Player, 0)
-	players = append(players, *internal.NewPlayer("jeremy"))
+	players = append(players, *internal.NewPlayer("jeremy", id))
+	id++
 
 	data := Data{
 		players,
@@ -62,7 +65,8 @@ func main() {
 
 	e.POST("/new_player", func(c echo.Context) error {
 		name := c.FormValue("name")
-		data.Players = append(data.Players, *internal.NewPlayer(name))
+		data.Players = append(data.Players, *internal.NewPlayer(name, id))
+		id++
 		return c.Render(200, "player_list", data)
 	})
 
