@@ -41,6 +41,35 @@
         <div><label>Losses</label>: {{.Losses}}</div>
         <div><label>Tricks</label>: {{.Tricks}}</div>
         <div><label>Lone Hands</label>: {{.Lone_hands}}</div>
-        <button>Edit</button>
+        <button hx-get="/players/edit" hx-vals="js:{p_id: {{.Id}}}">Edit</button>
     </div>
+{{ end }}
+
+{{ block "player_update_card" .}}
+<!-- display for player stats -->
+    <form hx-put="/players" hx-vals="js:{p_id: {{.Id}}}" hx-target="this" hx-swap="outerHTML">
+        <h3>{{.Name}}</h3>
+        <div>
+            <label>Games Played</label>
+            <input type="int" name="games_played" value={{.Games_played}}>
+        </div>
+        <div>
+            <label>Wins</label> 
+            <input type="int" name="wins" value={{.Wins}}>
+        </div>
+        <div>
+            <label>Losses</label> 
+            <input type="int" name="losses" value={{.Losses}}>
+        </div>
+        <div>
+            <label>Tricks</label>
+            <input type="int" name="tricks" value={{.Tricks}}>
+        </div>
+        <div>
+            <label>Lone Hands</label>
+            <input type="int" name="lone_hands" value={{.Lone_hands}}>
+        </div>
+        <button >Submit</button>
+        <button hx-get="/players" hx-vals="js:{p_id: {{.Id}}}">Cancel</button>
+    </form>
 {{ end }}
