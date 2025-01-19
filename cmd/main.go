@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"html/template"
 	"io"
@@ -41,6 +42,28 @@ func sortPlayers(players []internal.Player) []internal.Player {
 	return players
 }
 
+var data Data
+
+func getPlayer(id int) (internal.Player, error) {
+	for _, player := range data.Players {
+		if player.Id == id {
+			return player, nil
+		}
+	}
+
+	return internal.Player{}, errors.New("Player id not found")
+}
+
+func getName(id int) string {
+	for _, player := range data.Players {
+		if player.Id == id {
+			return player.Name
+		}
+	}
+
+	return ""
+}
+
 func main() {
 	player_id := 0
 
@@ -52,11 +75,20 @@ func main() {
 
 	e.Renderer = newTemplate()
 
-	players := make([]internal.Player, 0)
-	players = append(players, *internal.NewPlayer("jeremy", player_id))
-	player_id++
+	testers := []string{
+		"Lisa", "Billy", "Trish", "Mike",
+		"Kate", "Ed", "Melissa", "Grandpa",
+		"Gramdma", "Evan", "Tracy", "Alvaro",
+		"Maximus", "Tamara", "Jane",
+	}
 
-	data := Data{
+	players := make([]internal.Player, 0)
+	for _, person := range testers {
+		players = append(players, *internal.NewPlayer(person, player_id))
+		player_id++
+	}
+
+	data = Data{
 		players,
 		make([]internal.Game, 0),
 	}
@@ -179,6 +211,33 @@ func main() {
 		data.Players = append(data.Players, *internal.NewPlayer(name, player_id))
 		player_id++
 		return c.Render(200, "player_list", data)
+	})
+
+	e.POST("/games", func(c echo.Context) error {
+
+		t1_p1, _ := strconv.Atoi(c.FormValue("t1_p1"))
+		t1_p2, _ := strconv.Atoi(c.FormValue("t1_p2"))
+		t2_p1, _ := strconv.Atoi(c.FormValue("t2_p1"))
+		t2_p2, _ := strconv.Atoi(c.FormValue("t2_p2"))
+
+		// validate game before creation
+
+		// setup new game
+		temp := internal.Game{}
+
+		temp.T1 = [2]int{t1_p1, t1_p2}
+		temp.T2 = [2]int{t2_p1, t2_p2}
+
+		temp.T1_names[0] = getName(t1_p1)
+		temp.T1_names[1] = getName(t1_p2)
+		temp.T2_names[0] = getName(t2_p1)
+		temp.T2_names[1] = getName(t2_p2)
+
+		temp.Team_points = [2]int{0, 0}
+
+		data.Games = append(data.Games, temp)
+
+		return c.Render(200, "games_list", data)
 	})
 
 	e.GET("/games", func(c echo.Context) error {

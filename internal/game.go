@@ -1,9 +1,12 @@
 package internal
 
 type Game struct {
-	Players      []Player
-	Teams        []Player
-	Teams_points []int
+	T1       [2]int
+	T2       [2]int
+	T1_names [2]string
+	T2_names [2]string
+
+	Team_points [2]int
 
 	Winner     bool
 	Win_by_two bool

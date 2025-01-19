@@ -3,14 +3,81 @@
     <h1>Games Tab!</h1>
     <p>A list of current and completed games will be listed below</p>
 
+    {{template "games_list" .}}
+</div>
+{{ end }}
+
+{{ block "games_list" . }}
     <div>
         add new game
+        {{ template "add_game" . }}
     </div>
 
+    <div id="games_list">
     {{ range .Games }}
-    <div>
-        <p>{{ .Rounds }}</p>
-    </div>
+        {{ template "game_preview" . }}
     {{ end }}
 </div>
+{{ end }}
+
+{{ block "game_preview" .}}
+    <div hx-target="#games_list" hx-swap="outerHTML">
+        Winner
+        <div> Team 1
+            {{ range .T1_names }}
+            {{.}}
+            {{ end }}
+            <p>Points: {{index .Team_points 0}}</p>
+        </div>
+        <div> Team 2
+            {{ range .T2_names }}
+            {{.}}
+            {{ end }}
+    
+            <p>Points: {{index .Team_points 1}}</p>
+        </div>
+    
+        {{ if not .Winner }}
+        <button>play game</button>
+        {{ end }}
+    </div>
+{{ end }}
+
+{{ block "add_game" . }}
+<form hx-post="/games" hx-target="#games_list" hx-swap="outerHTML">
+    <div>
+        Team 1
+        <select id="t1_p1">
+            {{ range .Players }}
+            <option value="{{.Id}}">{{.Name}}</option>
+            {{ end }}
+        </select>
+        <select id="t1_p2">
+            {{ range .Players }}
+            <option value="{{.Id}}">{{.Name}}</option>
+            {{ end }}
+        </select>
+    </div>
+    <div>
+        Team 2
+        <select id="t2_p1">
+            {{ range .Players }}
+            <option value="{{.Id}}">{{.Name}}</option>
+            {{ end }}
+        </select>
+        <select id="t2_p2">
+            {{ range .Players }}
+            <option value="{{.Id}}">{{.Name}}</option>
+            {{ end }}
+        </select>
+    </div>
+
+    <div>
+        <button>Submit</button>
+    </div>
+</form>
+{{ end }}
+
+{{ block "active_game" . }}
+
 {{ end }}
