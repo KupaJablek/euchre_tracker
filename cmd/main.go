@@ -51,7 +51,7 @@ func getPlayer(id int) (internal.Player, error) {
 		}
 	}
 
-	return internal.Player{}, errors.New("Player id not found")
+	return internal.Player{}, errors.New("player id not found")
 }
 
 func getName(id int) string {
@@ -66,6 +66,7 @@ func getName(id int) string {
 
 func main() {
 	player_id := 0
+	game_id := 0
 
 	fmt.Println("welcome to the program")
 
@@ -142,14 +143,9 @@ func main() {
 		return c.String(http.StatusNotFound, msg)
 	})
 
-	e.GET("/players/edit", func(c echo.Context) error {
+	e.GET("/players/edit/:id", func(c echo.Context) error {
 
-		json_data := echo.Map{}
-		if err := c.Bind(&json_data); err != nil {
-			return c.Render(400, "players", data)
-		}
-
-		p_id := fmt.Sprintf("%v", json_data["p_id"])
+		p_id := c.Param("id")
 
 		id, err := strconv.Atoi(p_id)
 		if err != nil {
@@ -165,14 +161,9 @@ func main() {
 		return c.String(http.StatusNotFound, msg)
 	})
 
-	e.PUT("/players", func(c echo.Context) error {
+	e.PUT("/players/:id", func(c echo.Context) error {
 
-		json_data := echo.Map{}
-		if err := c.Bind(&json_data); err != nil {
-			return c.Render(400, "players", data)
-		}
-
-		id, err := strconv.Atoi(fmt.Sprintf("%v", json_data["p_id"]))
+		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			return c.Render(400, "players", data)
 		}
@@ -214,7 +205,6 @@ func main() {
 	})
 
 	e.POST("/games", func(c echo.Context) error {
-
 		t1_p1, _ := strconv.Atoi(c.FormValue("t1_p1"))
 		t1_p2, _ := strconv.Atoi(c.FormValue("t1_p2"))
 		t2_p1, _ := strconv.Atoi(c.FormValue("t2_p1"))
@@ -225,6 +215,8 @@ func main() {
 		// setup new game
 		temp := internal.Game{}
 
+		temp.Id = game_id
+		game_id++
 		temp.T1 = [2]int{t1_p1, t1_p2}
 		temp.T2 = [2]int{t2_p1, t2_p2}
 
@@ -242,6 +234,22 @@ func main() {
 
 	e.GET("/games", func(c echo.Context) error {
 		return c.Render(200, "games", data)
+	})
+
+	e.GET("/play_game/:id", func(c echo.Context) error {
+
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			return c.Render(200, "games_page", data)
+		}
+
+		for _, game := range data.Games {
+			if game.Id == id {
+				return c.Render(200, "play_game", game)
+			}
+		}
+
+		return c.Render(200, "games_page", data)
 	})
 
 	e.Logger.Fatal(e.Start(":" + port))

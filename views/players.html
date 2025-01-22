@@ -41,13 +41,13 @@
         <div><label>Losses</label>: {{.Losses}}</div>
         <div><label>Tricks</label>: {{.Tricks}}</div>
         <div><label>Lone Hands</label>: {{.Lone_hands}}</div>
-        <button hx-get="/players/edit" hx-vals="js:{p_id: {{.Id}}}">Edit</button>
+        <button hx-get="/players/edit/{{.Id}}">Edit</button>
     </div>
 {{ end }}
 
 {{ block "player_update_card" .}}
 <!-- display for player stats -->
-    <form hx-put="/players" hx-vals="js:{p_id: {{.Id}}}" hx-target="this" hx-swap="outerHTML">
+    <form hx-put="/players/{{.Id}}" hx-target="this" hx-swap="outerHTML">
         <h3>{{.Name}}</h3>
         <div>
             <label>Games Played</label>

@@ -1,6 +1,7 @@
 package internal
 
 type Game struct {
+	Id       int
 	T1       [2]int
 	T2       [2]int
 	T1_names [2]string

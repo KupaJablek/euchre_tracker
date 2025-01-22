@@ -1,18 +1,18 @@
 {{ block "games" . }}
-<div>
+<div id="games_page">
     <h1>Games Tab!</h1>
     <p>A list of current and completed games will be listed below</p>
+    
+    <div>
+        add new game
+        {{ template "add_game" . }}
+    </div>
 
     {{template "games_list" .}}
 </div>
 {{ end }}
 
 {{ block "games_list" . }}
-    <div>
-        add new game
-        {{ template "add_game" . }}
-    </div>
-
     <div id="games_list">
     {{ range .Games }}
         {{ template "game_preview" . }}
@@ -20,31 +20,8 @@
 </div>
 {{ end }}
 
-{{ block "game_preview" .}}
-    <div hx-target="#games_list" hx-swap="outerHTML">
-        Winner
-        <div> Team 1
-            {{ range .T1_names }}
-            {{.}}
-            {{ end }}
-            <p>Points: {{index .Team_points 0}}</p>
-        </div>
-        <div> Team 2
-            {{ range .T2_names }}
-            {{.}}
-            {{ end }}
-    
-            <p>Points: {{index .Team_points 1}}</p>
-        </div>
-    
-        {{ if not .Winner }}
-        <button>play game</button>
-        {{ end }}
-    </div>
-{{ end }}
-
 {{ block "add_game" . }}
-<form hx-post="/games" hx-target="#games_list" hx-swap="outerHTML">
+<form hx-post="/games" hx-target="#games_list" hx-swap="innerHTML">
     <div>
         Team 1
         <select id="t1_p1">
@@ -78,6 +55,52 @@
 </form>
 {{ end }}
 
-{{ block "active_game" . }}
+{{ block "game_preview" .}}
+    <div>
+        Winner
+        <div> Team 1
+            {{ range .T1_names }}
+                {{.}}
+            {{ end }}
 
+            <p>Points: {{index .Team_points 0}}</p>
+        </div>
+        <div> Team 2
+            {{ range .T2_names }}
+                {{.}}
+            {{ end }}
+    
+            <p>Points: {{index .Team_points 1}}</p>
+        </div>
+    
+        {{ if not .Winner }}
+        <button hx-get="/play_game/{{.Id}}" hx-target="#games_page" hx-swap="innerHTML">play game</button>
+        {{ end }}
+    </div>
 {{ end }}
+
+
+{{ block "play_game" . }}
+<div id="game_screen">
+    {{.Id}}
+
+    <p>Welcome to game: {{.Id}}</p>
+
+    <div>
+        <div>
+            Team 1 Score {{index .Team_points 0 }}
+            Team 2 Score {{index .Team_points 1 }}
+        </div>
+
+        <button>Team 1: +1 point</button>
+        <button>Team 2: +1 point</button>
+
+    </div>
+</div>
+{{ end }}
+
+{{ block "test" .}}
+<div>
+    {{.}}
+</div>
+{{ end}}
